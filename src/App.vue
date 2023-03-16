@@ -1,7 +1,7 @@
 <script setup>
 // https://stackoverflow.com/questions/64248887/nodejs-converting-mtc-midi-timecode-quater-message-into-a-full-timecode-st
 
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import * as JZZ from "jzz";
 
 var slave = ref(JZZ.SMPTE()); // slave clock
@@ -12,9 +12,11 @@ const isNoteOff = ref(false);
 const note = ref(null);
 const videoId = ref(null);
 const videoPath = [
-  "/LIVE0319_op.m4v",
-  "/20230319LIVE_ed.m4v",
-  "/LIVE0319_endroll.m4v",
+  "/20230319LIVE_01.m4v",
+  "/20230319LIVE_02.m4v",
+  "/20230319LIVE_03.m4v",
+  "/20230319LIVE_04.m4v",
+  "/20230319LIVE_05.m4v",
 ];
 const videoEl = ref(null);
 
@@ -39,13 +41,18 @@ port
 const timeCodeString = computed(() => slave.value.toString());
 
 watch([ch, isNoteOn], (a, b) => {
-  if (a[0] === 13) {
-    console.log(a);
+  if (!isNoteOn.value) return;
+  console.log(ch.value);
+  if (a[0] === 11) {
     playVideo(0);
-  } else if (a[0] === 14) {
+  } else if (a[0] === 12) {
     playVideo(1);
-  } else if (a[0] === 15) {
+  } else if (a[0] === 13) {
     playVideo(2);
+  } else if (a[0] === 14) {
+    playVideo(3);
+  } else if (a[0] === 15) {
+    playVideo(4);
   }
 });
 
@@ -55,6 +62,13 @@ const playVideo = (num) => {
     videoEl.value.play();
   });
 };
+
+onMounted(() => {
+  videoEl.value.volume = 0.3;
+  /* videoEl.value.addEventListener("ended", () => {
+    videoEl.value.currentTime = 0;
+  }); */
+});
 
 // about video fullscreen
 const videoFullScreen = () => {
