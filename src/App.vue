@@ -4,7 +4,7 @@
 import { ref, computed, watch, onMounted } from "vue";
 import * as JZZ from "jzz";
 
-var slave = ref(JZZ.SMPTE()); // slave clock
+const slave = ref(JZZ.SMPTE()); // slave clock
 const message = ref(null);
 const ch = ref(null);
 const isNoteOn = ref(false);
@@ -12,23 +12,26 @@ const isNoteOff = ref(false);
 const note = ref(null);
 const videoId = ref(null);
 const videoPath = [
-  "/20230319LIVE_01.m4v",
-  "/20230319LIVE_02.m4v",
-  "/20230319LIVE_03.m4v",
-  "/20230319LIVE_04.m4v",
-  "/20230319LIVE_05.m4v",
+  "/20230521/01_20230521_op-Strange_Day.m4v",
+  "/20230521/02_20230521_UTSUYUME.m4v",
+  "/20230521/03_20230521_Z.A.C.O.m4v",
+  "/20230521/04_20230521_lastboss.m4v",
+  "/20230521/05_20230521_ed_1.m4v",
+  "/20230521/06_20230521_ed_2.m4v",
+  "/20230521/20230521_end_roll.m4v",
 ];
 const videoEl = ref(null);
 
-const port = JZZ().openMidiIn(0);
+const port = JZZ().openMidiIn(/IAC/);
 port
   .connect(function (msg) {
     slave.value.read(msg);
+    console.log(msg.toString());
   })
   .connect(
     JZZ.Widget({
       _receive: (msg) => {
-        // message.value = msg;
+        message.value = msg;
         ch.value = msg.getChannel(); // チャンネル番号は0から取得になる（1ch -> 0）
         isNoteOn.value = msg.isNoteOn();
         isNoteOff.value = msg.isNoteOff();
@@ -41,9 +44,11 @@ port
 const timeCodeString = computed(() => slave.value.toString());
 
 watch([ch, isNoteOn], (a, b) => {
-  if (!isNoteOn.value) return;
-  console.log(ch.value);
-  if (a[0] === 11) {
+  console.log(a[0], b[0]);
+  if (!isNoteOn.value && a[0] === b[0]) return;
+  //console.log(ch.value, isNoteOn.value);
+  playVideo(a[0]);
+  /* if (a[0] === 11) {
     playVideo(0);
   } else if (a[0] === 12) {
     playVideo(1);
@@ -53,7 +58,7 @@ watch([ch, isNoteOn], (a, b) => {
     playVideo(3);
   } else if (a[0] === 15) {
     playVideo(4);
-  }
+  } */
 });
 
 const playVideo = (num) => {
