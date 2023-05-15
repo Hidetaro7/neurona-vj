@@ -1,4 +1,4 @@
-/public/*.m4v
+/public/**/*.m4v
 
 # Logs
 logs

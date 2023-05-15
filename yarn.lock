@@ -7,6 +7,13 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.21.1.tgz#a8f81ee2fe872af23faea4b17a08fcc869de7bcc"
   integrity sha512-JzhBFpkuhBNYUY7qs+wTzNmyCWUHEaAFpQQD2YfU1rPL38/L43Wvid0fFkiOCnHvsGncRZgEPyGnltABLcVDTg==
 
+"@babel/runtime@^7.20.6":
+  version "7.21.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.21.5.tgz#8492dddda9644ae3bda3b45eabe87382caee7200"
+  integrity sha512-8jI69toZqqcsnqGGqwGS4Qb1VwLOEp4hz+CXPywcvjs60u3B4Pom/U/7rm4W8tMOYEB+E9wgD0mW1l3r8qlI9Q==
+  dependencies:
+    regenerator-runtime "^0.13.11"
+
 "@esbuild/android-arm64@0.16.17":
   version "0.16.17"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.16.17.tgz#cf91e86df127aa3d141744edafcba0abdc577d23"
@@ -122,6 +129,11 @@
   resolved "https://registry.yarnpkg.com/@types/webmidi/-/webmidi-2.0.6.tgz#c9b1428bbc5d5f49cc6201eae0dc5e2b3fd23e0e"
   integrity sha512-sfS0A5IryqmBrUpcGPipEPeFdpqmZzP6b6lZFxHKgz5n2Vhzh4yJ5P2TvoDUhDjqJyv0Y25ng0Qodgo2Vu08ug==
 
+"@types/webmidi@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@types/webmidi/-/webmidi-2.0.7.tgz#db6bc2e5fbf2ece44265b0a4fafde6573acd5210"
+  integrity sha512-BMVefNAum/swSmQJdTbRWBuDPeWT7fHAZEzmtY6eBl1ObvkWVzh39VvAFC8v9n7Y5XoOpWmeYzyUUVfmpq3ggQ==
+
 "@vitejs/plugin-vue@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-4.0.0.tgz#93815beffd23db46288c787352a8ea31a0c03e5e"
@@ -222,6 +234,13 @@ csstype@^2.6.8:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.21.tgz#2efb85b7cc55c80017c66a5ad7cbd931fda3a90e"
   integrity sha512-Z1PhmomIfypOpoMjRQB70jfvy/wxT50qW08YXO5lMIJkrdq4yOTR+AW7FqutScmB9NkLwxo+jU+kZLbofZZq/w==
 
+djipevents@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/djipevents/-/djipevents-2.0.7.tgz#4805dcb8dcf0b4a2c6e51eaecdfc218bb8f202fb"
+  integrity sha512-KNFYaU85imxOCKOUsIR70Iz9E19r96/X7LSH+u0tSoZdpWcBdzoqtTsU+wuLhc6GMpSFob+KInkZAbfKi01Bjg==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+
 esbuild@^0.16.14:
   version "0.16.17"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.16.17.tgz#fc2c3914c57ee750635fee71b89f615f25065259"
@@ -284,6 +303,14 @@ jazz-midi@^1.7.9:
   resolved "https://registry.yarnpkg.com/jazz-midi/-/jazz-midi-1.7.9.tgz#ad564e85acf12414aec7ef7d879ad61a5d7f6896"
   integrity sha512-c8c4BBgwxdsIr1iVm53nadCrtH7BUlnX3V95ciK/gbvXN/ndE5+POskBalXgqlc/r9p2XUbdLTrgrC6fou5p9w==
 
+jzz@^1.5.6:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/jzz/-/jzz-1.6.2.tgz#a7051f2556e67a00fc32b3830b62af0c277df51c"
+  integrity sha512-Xw0XMb4vLTidKVsv8JGauBCwr+lke++3+BxpSAv965Sj25pZxBL3BPtdfMJ1Xrpr68GkbK11YmMeYOGk2ebxRQ==
+  dependencies:
+    "@types/webmidi" "^2.0.7"
+    jazz-midi "^1.7.9"
+
 jzz@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/jzz/-/jzz-1.6.0.tgz#0654a0440caac23091a014cea3bba95c2a501c88"
@@ -322,6 +349,11 @@ postcss@^8.1.10, postcss@^8.4.21:
     nanoid "^3.3.4"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
+
+regenerator-runtime@^0.13.11:
+  version "0.13.11"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
+  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 resolve@^1.22.1:
   version "1.22.1"
@@ -381,3 +413,12 @@ vue@^3.2.45:
     "@vue/runtime-dom" "3.2.47"
     "@vue/server-renderer" "3.2.47"
     "@vue/shared" "3.2.47"
+
+webmidi@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/webmidi/-/webmidi-3.1.5.tgz#1dfea41fde25cb02d77cc98f0bac06047cd4baac"
+  integrity sha512-l+keAdhhWbW4ygJPgThcidDEMRW3l39Ppz389hbcxijiWwyo1k62GgO0JGb5V7we59qYLTVCCjC9fwYWob1wXA==
+  dependencies:
+    djipevents "^2.0.7"
+  optionalDependencies:
+    jzz "^1.5.6"

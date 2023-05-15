@@ -1,54 +1,60 @@
 <script setup>
-// https://stackoverflow.com/questions/64248887/nodejs-converting-mtc-midi-timecode-quater-message-into-a-full-timecode-st
-
-import { ref, computed, watch } from "vue";
-import * as JZZ from "jzz";
-
-var slave = ref(JZZ.SMPTE()); // slave clock
-const message = ref(null);
-const ch = ref(null);
-const isNoteOn = ref(false);
-const isNoteOff = ref(false);
-const note = ref(null);
+import { ref, watch, onMounted } from "vue";
+import { WebMidi } from "webmidi";
+const devices = ref([]);
+const note = ref();
 const videoId = ref(null);
+
+/* TODO: 5/21 イーストコート */
 const videoPath = [
-  "/LIVE0319_op.m4v",
-  "/20230319LIVE_ed.m4v",
-  "/LIVE0319_endroll.m4v",
+  "/20230521/01_20230521_op-Strange_Day.m4v",
+  "/20230521/02_20230521_UTSUYUME.m4v",
+  "/20230521/03_20230521_Z.A.C.O.m4v",
+  "/20230521/04_ZACO_movie.m4v",
+  "/20230521/05_20230521_lastboss.m4v",
+  "/20230521/06_20230521_ed.m4v",
+  "/20230521/07_20230521_shimobe.m4v",
+  "/20230521/08_20230521_end_roll.m4v",
 ];
+
+/* TODO: 5/23 キャッツホール */
+/* const videoPath = [
+  "/20230523/01_20230523_op-StrangeDay.m4v",
+  "/20230521/03_20230521_Z.A.C.O.m4v",
+  "/20230521/04_ZACO_movie.m4v",
+  "/20230523/03_20230523_soranihabureba.m4v",
+  "/20230523/04_20230523_ed.m4v",
+  "/20230521/07_20230521_shimobe.m4v",
+  "/20230523/05_20230523 end roll.m4v",
+]; */
 const videoEl = ref(null);
+// Enable WEBMIDI.js and trigger the onEnabled() function when ready
 
-const port = JZZ().openMidiIn(0);
-port
-  .connect(function (msg) {
-    slave.value.read(msg);
-  })
-  .connect(
-    JZZ.Widget({
-      _receive: (msg) => {
-        // message.value = msg;
-        ch.value = msg.getChannel(); // チャンネル番号は0から取得になる（1ch -> 0）
-        isNoteOn.value = msg.isNoteOn();
-        isNoteOff.value = msg.isNoteOff();
-        note.value = isNoteOff.value ? null : msg.getNote();
-      },
-    })
-  )
-  .close();
+WebMidi.enable()
+  .then(onEnabled)
+  .catch((err) => console.log(err));
 
-const timeCodeString = computed(() => slave.value.toString());
-
-watch([ch, isNoteOn], (a, b) => {
-  if (a[0] === 13) {
-    console.log(a);
-    playVideo(0);
-  } else if (a[0] === 14) {
-    playVideo(1);
-  } else if (a[0] === 15) {
-    playVideo(2);
+// Function triggered when WEBMIDI.js is ready
+function onEnabled() {
+  // Display available MIDI input devices
+  if (WebMidi.inputs.length < 1) {
+    devices.value.push("No device detected.");
+  } else {
+    WebMidi.inputs.forEach((device, index) => {
+      devices.value.push(`${index}: ${device.name}`);
+    });
   }
-});
+  // const mySynth = WebMidi.inputs[0];
+  const mySynth = WebMidi.getInputByName("IAC driver UAD Console MIDI");
 
+  mySynth.channels[16].addListener("noteon", (e) => {
+    note.value = e.note.number;
+  });
+}
+
+watch(note, (a, b) => {
+  playVideo(a);
+});
 const playVideo = (num) => {
   videoId.value = num;
   videoEl.value.addEventListener("canplay", () => {
@@ -56,11 +62,15 @@ const playVideo = (num) => {
   });
 };
 
+onMounted(() => {
+  videoEl.value.volume = 0.3;
+});
+
 // about video fullscreen
 const videoFullScreen = () => {
   videoEl.value.requestFullscreen();
 };
-document.addEventListener(
+/* document.addEventListener(
   "keydown",
   (e) => {
     if (e.key === "Enter") {
@@ -68,36 +78,33 @@ document.addEventListener(
     }
   },
   false
-);
+); */
 </script>
 
 <template>
-  <p class="timecode">
-    {{ timeCodeString }}
-  </p>
-  <p>{{ message }}</p>
-  <p>channel: {{ ch }}</p>
-  <p>isNoteOn: {{ isNoteOn }}</p>
-  <p>isNoteOff: {{ isNoteOff }}</p>
-  <p>note: {{ note }}</p>
-  <p><button @click="videoFullScreen(true)">フルスクリーン</button></p>
   <div>
-    {{ videoId }}番のVideoの再生を開始
+    {{ devices }}
+    <p>note: {{ note }}</p>
     <video
       class="preview-video"
       :src="videoPath[videoId]"
       ref="videoEl"
     ></video>
+    <p class="button fullscreen">
+      <button @click="videoFullScreen()">Full screen</button>
+    </p>
   </div>
 </template>
 
 <style scoped>
-.timecode {
-  font-size: 2rem;
-}
-
 .preview-video {
   width: 100%;
   aspect-ratio: auto;
+}
+
+.button.fullscreen button {
+  margin: 40px 0;
+  font-weight: bold;
+  font-size: 2rem;
 }
 </style>
