@@ -53,7 +53,6 @@ function onEnabled() {
 }
 
 watch(note, (a, b) => {
-  //if (a === b) return;
   playVideo(a);
 });
 const playVideo = (num) => {
